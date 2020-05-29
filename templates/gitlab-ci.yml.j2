@@ -11,6 +11,9 @@ stages:
   stage: {{ suite.container }}
   script:
     - sudo docker run --rm
+{% for key, value in docker_args.params.items() |list %}
+            --{{ key }}={{ value }} \
+{% endfor %}
 {% if publish_to_s3 == true or publish_to_s3_env_vars == true %}
         -e S3_ENDPOINT_URL={{ s3_endpoint_url }}
         -e S3_DST_URL={{ s3_dst_url }}/${CI_JOB_NAME}-${CI_JOB_ID}
